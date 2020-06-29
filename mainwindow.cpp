@@ -47,17 +47,23 @@ void MainWindow::on_actionQuit_triggered()
 // Help Menu - About QNotepad action
 void MainWindow::on_actionAbout_QNotepad_triggered()
 {
-    QString currentOs = getOsName();
+    QString currentOs = getOsName();    // Get current OS name
 
     QMessageBox::about(this, "About QNotepad", "A simple and lightweight cross-platform notepad application written in Qt and C++."
                                                "\n\n"
-                                               "Author: Nikhil Prabhu"
+                                               "Author: Nikhil Prabhu."
                                                "\n\n"
-                                               "License: GNU General Public License v2"
+                                               "License: GNU General Public License v2."
                                                "\n\n"
-                                               "Version: " APPLICATION_VERSION
+                                               "Version: " APPLICATION_VERSION "."
                                                "\n\n"
-                                               "OS: " + currentOs);
+                                               "OS: " + currentOs + ".");
+}
+
+// Help Menu - About Qt action
+void MainWindow::on_actionAbout_Qt_triggered()
+{
+    QMessageBox::aboutQt(this, "About Qt");
 }
 
 MainWindow::~MainWindow()
