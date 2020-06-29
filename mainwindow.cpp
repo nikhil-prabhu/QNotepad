@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QMessageBox>
+#include <QPixmap>
 
 #define APPLICATION_NAME "QNotepad"             // Application name
 #define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
@@ -28,7 +29,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Set window title
     this->setWindowTitle(APPLICATION_NAME);
+
+    // Set window icon
+    QPixmap applicationIcon(":/img/assets/qnotepad.svg");
+    this->setWindowIcon(applicationIcon);
 }
 
 /* MENU ACTIONS */
