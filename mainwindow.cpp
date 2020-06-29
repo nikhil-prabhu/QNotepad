@@ -3,7 +3,8 @@
 
 #include <QMessageBox>
 
-#define APPLICATION_NAME "QNotepad"     // Application name
+#define APPLICATION_NAME "QNotepad"             // Application name
+#define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,7 +35,9 @@ void MainWindow::on_actionAbout_QNotepad_triggered()
                                                "\n\n"
                                                "Author: Nikhil Prabhu"
                                                "\n\n"
-                                               "License: GNU General Public License v2");
+                                               "License: GNU General Public License v2"
+                                               "\n\n"
+                                               "Version: " APPLICATION_VERSION);
 }
 
 MainWindow::~MainWindow()
