@@ -3,6 +3,9 @@
 
 #include <QMessageBox>
 #include <QPixmap>
+#include <QFile>
+#include <QFileDialog>
+#include <QTextStream>
 
 #define APPLICATION_NAME "QNotepad"             // Application name
 #define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
@@ -30,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Set window title
-    this->setWindowTitle(APPLICATION_NAME);
+    this->setWindowTitle(APPLICATION_NAME " - untitled");
 
     // Set window icon
     QPixmap applicationIcon(":/img/assets/qnotepad.svg");
@@ -38,6 +41,40 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 /* MENU ACTIONS */
+
+// File Menu - Open action
+void MainWindow::on_actionOpen_triggered()
+{
+    // Prompt user for file to open
+    QString filePath = QFileDialog::getOpenFileName(this, "Open file");
+
+    if ( !filePath.isEmpty() )
+    {
+        QFile file(filePath);   // Create QFile object
+
+        if ( !file.open(QIODevice::ReadOnly) )
+        {
+            // Error opening file
+            QMessageBox::critical(this, "Open file - Error", "Error opening file");
+            return;
+        }
+
+        // Read file content and display in notepad text area
+        QTextStream in(&file);
+        ui->notepadTextArea->setPlainText(in.readAll());
+
+        // Add filename to window title
+        QFileInfo fileInfo(file.fileName());
+        QString fileName(fileInfo.fileName());
+        this->setWindowTitle(APPLICATION_NAME " - " + fileName);
+
+        // Add success message to statusbar
+        ui->statusbar->showMessage("File '" + fileName + "' opened.");
+
+        // Close file
+        file.close();
+    }
+}
 
 // File Menu - Quit action
 void MainWindow::on_actionQuit_triggered()
