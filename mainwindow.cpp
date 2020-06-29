@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 /* MENU ACTIONS */
 
-// Quit action
+// File Menu - Quit action
 void MainWindow::on_actionQuit_triggered()
 {
     auto userChoice = QMessageBox::question(this, "Quit QNotepad", "Are you sure you want to quit?");
@@ -25,6 +25,16 @@ void MainWindow::on_actionQuit_triggered()
     {
         close();        // Quit the application
     }
+}
+
+// Help Menu - About QNotepad action
+void MainWindow::on_actionAbout_QNotepad_triggered()
+{
+    QMessageBox::about(this, "About QNotepad", "A simple and lightweight cross-platform notepad application written in Qt and C++."
+                                               "\n\n"
+                                               "Author: Nikhil Prabhu"
+                                               "\n\n"
+                                               "License: GNU General Public License v2");
 }
 
 MainWindow::~MainWindow()
