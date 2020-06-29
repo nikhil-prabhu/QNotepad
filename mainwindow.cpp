@@ -6,6 +6,22 @@
 #define APPLICATION_NAME "QNotepad"             // Application name
 #define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
 
+// Detect operating system
+QString getOsName()
+{
+#if defined(Q_OS_MACOS)
+return QLatin1String("macOS");
+#elif defined(Q_OS_WIN)
+return QLatin1String("Microsoft Windows");
+#elif defined(Q_OS_LINUX)
+return QLatin1String("GNU/Linux");
+#elif defined(Q_OS_UNIX)
+return QLatin1String("UNIX");
+#else
+return QLatin1String("Unknown");
+#endif
+}
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -31,13 +47,17 @@ void MainWindow::on_actionQuit_triggered()
 // Help Menu - About QNotepad action
 void MainWindow::on_actionAbout_QNotepad_triggered()
 {
+    QString currentOs = getOsName();
+
     QMessageBox::about(this, "About QNotepad", "A simple and lightweight cross-platform notepad application written in Qt and C++."
                                                "\n\n"
                                                "Author: Nikhil Prabhu"
                                                "\n\n"
                                                "License: GNU General Public License v2"
                                                "\n\n"
-                                               "Version: " APPLICATION_VERSION);
+                                               "Version: " APPLICATION_VERSION
+                                               "\n\n"
+                                               "OS: " + currentOs);
 }
 
 MainWindow::~MainWindow()
