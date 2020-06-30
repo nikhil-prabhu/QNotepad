@@ -6,10 +6,9 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QTextStream>
-#include <QCloseEvent>
 
 #define APPLICATION_NAME "QNotepad"             // Application name
-#define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
+#define APPLICATION_VERSION "v0.1.0-alpha"      // Application version
 
 // Detect operating system
 QString getOsName()
