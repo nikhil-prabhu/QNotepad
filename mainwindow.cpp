@@ -8,7 +8,7 @@
 #include <QTextStream>
 
 #define APPLICATION_NAME "QNotepad"             // Application name
-#define APPLICATION_VERSION "v0.1.0-alpha"      // Application version
+#define APPLICATION_VERSION "v1.0.0-alpha"      // Application version
 
 // Detect operating system
 QString getOsName()
