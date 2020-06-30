@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QCloseEvent>
 
 #define APPLICATION_NAME "QNotepad"             // Application name
 #define APPLICATION_VERSION "v0.0.1-alpha"      // Application version
@@ -171,11 +172,18 @@ void MainWindow::on_actionSave_as_triggered()
 // File Menu - Quit action
 void MainWindow::on_actionQuit_triggered()
 {
-    auto userChoice = QMessageBox::question(this, "Quit QNotepad", "Are you sure you want to quit?");
-
-    if ( userChoice == QMessageBox::Yes )
+    if ( fileIsSaved == false )
     {
-        close();        // Quit the application
+        auto userChoice = QMessageBox::question(this, "Quit QNotepad", "You have unsaved changes. Are you sure you want to quit?");
+
+        if ( userChoice == QMessageBox::Yes )
+        {
+            close();
+        }
+    }
+    else
+    {
+        close();
     }
 }
 
