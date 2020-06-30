@@ -26,6 +26,15 @@ return QLatin1String("Unknown");
 #endif
 }
 
+// Current file name
+QString fileName = "untitled";
+
+// Current file path
+QString filePath;
+
+// Current file save status
+bool fileIsSaved = true;
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -33,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // Set window title
-    this->setWindowTitle(APPLICATION_NAME " - untitled");
+    this->setWindowTitle(APPLICATION_NAME " - " + fileName);
 
     // Set window icon
     QPixmap applicationIcon(":/img/assets/qnotepad.svg");
@@ -46,16 +55,16 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::on_actionOpen_triggered()
 {
     // Prompt user for file to open
-    QString filePath = QFileDialog::getOpenFileName(this, "Open file");
+    filePath = QFileDialog::getOpenFileName(this, "Open file");
 
     if ( !filePath.isEmpty() )
     {
         QFile file(filePath);   // Create QFile object
 
-        if ( !file.open(QIODevice::ReadOnly) )
+        if ( !file.open(QIODevice::ReadOnly | QIODevice::Text) )
         {
             // Error opening file
-            QMessageBox::critical(this, "Open file - Error", "Error opening file");
+            QMessageBox::critical(this, "Open file - Error", "Error opening file.");
             return;
         }
 
@@ -65,14 +74,97 @@ void MainWindow::on_actionOpen_triggered()
 
         // Add filename to window title
         QFileInfo fileInfo(file.fileName());
-        QString fileName(fileInfo.fileName());
+        fileName = fileInfo.fileName();
         this->setWindowTitle(APPLICATION_NAME " - " + fileName);
 
         // Add success message to statusbar
         ui->statusbar->showMessage("File '" + fileName + "' opened.");
 
+        // Change saved status to true
+        fileIsSaved = true;
+
         // Close file
         file.close();
+    }
+}
+
+// File Menu - Save action
+void MainWindow::on_actionSave_triggered()
+{
+    if ( fileName == "untitled" )
+    {
+        on_actionSave_as_triggered();
+    }
+    else
+    {
+        QFile file(filePath);   // Create QFile object
+
+        if ( !file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text) )
+        {
+            // Error saving to file
+            QMessageBox::critical(this, "Save file - Error", "Error saving to file.");
+        }
+        else
+        {
+            QTextStream out(&file);
+            QString content = ui->notepadTextArea->toPlainText();
+
+            // Write to file
+            out << content;
+
+            // Close file
+            file.close();
+
+            // Remove asterisk from next to file name on window title
+            this->setWindowTitle(APPLICATION_NAME " - " + fileName);
+
+            // Add success message to statusbar
+            ui->statusbar->showMessage("File '" + fileName + "' saved.");
+
+            // Set saved status to true
+            fileIsSaved = true;
+        }
+    }
+}
+
+// File Menu - Save as action
+void MainWindow::on_actionSave_as_triggered()
+{
+    filePath = QFileDialog::getSaveFileName(this, "Save as");
+
+    if ( !filePath.isEmpty() )
+    {
+        QFile file(filePath);   // Create QFile object
+
+        if ( !file.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text) )
+        {
+            // Error saving to file
+            QMessageBox::critical(this, "Save file - Error", "Error saving to file.");
+        }
+        else
+        {
+            QTextStream out(&file);
+            QString content = ui->notepadTextArea->toPlainText();
+
+            // Write to file
+            out << content;
+
+            // Close file
+            file.close();
+
+            // Set file name to new name of file
+            QFileInfo fileInfo(file.fileName());
+            fileName = fileInfo.fileName();
+
+            // Change file name in window title
+            this->setWindowTitle(APPLICATION_NAME " - " + fileName);
+
+            // Add success message to statusbar
+            ui->statusbar->showMessage("File '" + fileName + "' saved.");
+
+            // Set saved status to true
+            fileIsSaved = true;
+        }
     }
 }
 
@@ -114,3 +206,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_notepadTextArea_textChanged()
+{
+    // Change saved status
+    fileIsSaved = false;
+
+    // Clear statubar
+    ui->statusbar->clearMessage();
+
+    // Add an asterisk next to file name on window title
+    this->setWindowTitle(APPLICATION_NAME " - " + fileName + "*");
+}

@@ -18,11 +18,17 @@ public:
 private slots:
     void on_actionOpen_triggered();
 
+    void on_actionSave_triggered();
+
+    void on_actionSave_as_triggered();
+
     void on_actionQuit_triggered();
 
     void on_actionAbout_QNotepad_triggered();
 
     void on_actionAbout_Qt_triggered();
+
+    void on_notepadTextArea_textChanged();
 
 private:
     Ui::MainWindow *ui;
